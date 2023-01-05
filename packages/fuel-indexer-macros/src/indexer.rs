@@ -545,8 +545,10 @@ fn process_fn_items(
                             }
                             Receipt::ReturnData { data, id, .. } => {
                                 #contract_conditional
-                                let selector = return_types.pop().expect("No return type available. <('-'<)");
-                                decoder.decode_return_type(selector, data);
+                                // See https://github.com/FuelLabs/fuel-indexer/issues/449
+                                if let Some(selector) = return_types.pop() {
+                                    decoder.decode_return_type(selector, data);
+                                }
                             }
                             Receipt::Transfer { id, to, asset_id, amount, pc, is, .. } => {
                                 #contract_conditional
